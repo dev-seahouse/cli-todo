@@ -69,8 +69,6 @@ const run = async () => {
     }
   }
 
-  await initialize();
-
   async function getUserAction() {
     let answer = await prompt.displayMenu();
     if (answer.command === 'add') {
@@ -82,8 +80,9 @@ const run = async () => {
     }
     await getUserAction();
   }
-
+  await initialize();
   await getUserAction();
-
 };
+
+
 run();
