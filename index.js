@@ -75,11 +75,12 @@ const run = async () => {
       await addNewTodo();
     } else if (answer.command === 'view') {
       await showTodo();
-    } else if (answer.command ==='delete') {
+    } else if (answer.command === 'delete') {
       await deleteTodo();
     }
     await getUserAction();
   }
+
   await initialize();
   await getUserAction();
 };

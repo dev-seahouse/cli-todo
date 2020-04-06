@@ -20,7 +20,9 @@ class TodoList {
   }
 
   markAllIncomplete() {
-    this.list.forEach(item => { item.markAsIncomplete();} );
+    this.list.forEach(item => {
+      item.markAsIncomplete();
+    });
   }
 
   remove(id) {
@@ -61,8 +63,8 @@ class TodoItem {
     this.isDone = false;
   }
 
-  toggleDone () {
-    this.isDone? this.isDone = false : this.isDone = true;
+  toggleDone() {
+    this.isDone ? this.isDone = false : this.isDone = true;
   }
 
   get id() {

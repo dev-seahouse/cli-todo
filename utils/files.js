@@ -22,9 +22,9 @@ const loadJSON = async filePath => JSON.parse(await readFile(filePath));
 
 const getDataPath = () => conf.get('dataPath');
 
-const setDataPath = (path = DEFAULT_DATA_PATH ) => conf.set('dataPath', path);
+const setDataPath = (path = DEFAULT_DATA_PATH) => conf.set('dataPath', path);
 
-const createNewData = (path = DEFAULT_DATA_PATH ) => writeFile(path, '[]');
+const createNewData = (path = DEFAULT_DATA_PATH) => writeFile(path, '[]');
 
 const isDataExist = () => isPathExists(getDataPath());
 

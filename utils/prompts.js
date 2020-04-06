@@ -36,7 +36,7 @@ const deleteTodo = () => {
   const choices = todoListArr.map((todoItem, index) => {
     return {
       name: chalk.blue(todoItem.title) + "\t" + chalk.white(moment(todoItem.createdAt).fromNow() +
-        "\t"+ chalk.white(todoItem.createdAt)),
+        "\t" + chalk.white(todoItem.createdAt)),
       value: todoItem.id,
     }
   });
@@ -94,7 +94,7 @@ const displayTodo = (todoListArr) => {
   const choices = todoListArr.map((todoItem, index) => {
     return {
       name: chalk.blue(todoItem.title) + "\t" + chalk.white(moment(todoItem.createdAt).fromNow() +
-       "\t"+ chalk.white(todoItem.createdAt)),
+        "\t" + chalk.white(todoItem.createdAt)),
       value: todoItem.id,
       checked: todoItem.isDone
     }
