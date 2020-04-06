@@ -15,6 +15,10 @@ class TodoList {
     this.list.push(todoItem);
   }
 
+  getItemById(id) {
+    return this.list.find(item => item.id === id);
+  }
+
   remove(arrIndex) {
     this.list.splice(arrIndex, 1);
   }
@@ -26,6 +30,7 @@ class TodoList {
   markAsIncomplete(arrIndex) {
     this.list[arrIndex].markAsIncomplete();
   }
+
 
   getTodoList() {
     return this.list;
@@ -52,6 +57,9 @@ class TodoItem {
     this.isDone = false;
   }
 
+  toggleDone () {
+    this.isDone? this.isDone = false : this.isDone = true;
+  }
 
   get id() {
     return this._id;

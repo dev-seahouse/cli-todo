@@ -8,38 +8,33 @@ const {TodoList, TodoItem} = require('./todo');
 
 let todoList;
 
-clear();
 
-log(
-  chalk.blueBright(
-    figlet.textSync('DO IT !', {font: 'Star Wars', horizontalLayout: 'full'})
-  )
-);
 
 // todo: invalid json error handler
 // todo: missing user path input validation and error handling
 // todo: big clean up
 
 const run = async () => {
-  if (!files.isDataExist()) {
-    let answer = await prompt.confirmDefaultDataPath();
-    if (answer.newDataPath) {
-     files.setDataPath(answer.newDataPath);
+
+  async function initialize() {
+
+    clear();
+
+    log(chalk.blueBright(figlet.textSync('DO IT !', {font: 'Star Wars', horizontalLayout: 'full'})));
+
+    if (!files.isDataExist()) {
+      let answer = await prompt.confirmDefaultDataPath();
+      if (answer.newDataPath) {
+        files.setDataPath(answer.newDataPath);
+      }
+      await files.createNewData();
     }
-    await files.createNewData();
+    const dataJson = await files.loadJSON(files.getDataPath());
+    todoList = new TodoList(dataJson);
   }
-  const dataJson = await files.loadJSON(files.getDataPath());
-  todoList = new TodoList(dataJson);
-
-  let answer = await prompt.displayMenu();
-  if (answer.command === 'add') {
-    const newTodosToAdd = await getNewTodos([]);
-    await newTodosToAdd.forEach(todo => todoList.add(new TodoItem(todo)));
-    todoList.save();
-  }
-
 
   async function getNewTodos( todosToAdd) {
+
     let userInput = await prompt.addTodo();
     todosToAdd.push(userInput.newTodo);
     // creation of to do can be done here but it would violate separation of concern
@@ -49,7 +44,32 @@ const run = async () => {
       return todosToAdd
     }
   }
+
+  async function addNewTodo() {
+    const newTodosToAdd = await getNewTodos([]);
+    await newTodosToAdd.forEach(todo => todoList.add(new TodoItem(todo)));
+    todoList.save();
+  }
+
+  async function showTodo() {
+    const itemsToUpdate = await prompt.displayTodo(todoList.getTodoList()).todoList;
+    if (itemsToUpdate && itemsToUpdate.length) {
+      itemsToUpdate.each(id => {
+        const item = todoList.getItemById(id);
+        item.toggleDone();
+      })
+    }
+    todoList.save();
+  }
+
+  await initialize();
+  let answer = await prompt.displayMenu();
+  if (answer.command === 'add') {
+    await addNewTodo();
+    answer = prompt.displayMenu();
+  } else if (answer.command === 'view') {
+    await showTodo();
+  }
+
 };
-
 run();
-
