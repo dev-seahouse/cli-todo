@@ -78,7 +78,7 @@ const run = async () => {
     } else if (answer.command === 'view') {
       await showTodo();
     } else if (answer.command ==='delete') {
-
+      await deleteTodo();
     }
     await getUserAction();
   }
