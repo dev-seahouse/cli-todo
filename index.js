@@ -8,8 +8,6 @@ const {TodoList, TodoItem} = require('./todo');
 
 let todoList;
 
-
-
 // todo: invalid json error handler
 // todo: missing user path input validation and error handling
 // todo: big clean up
@@ -33,14 +31,14 @@ const run = async () => {
     todoList = new TodoList(dataJson);
   }
 
-  async function getNewTodos( todosToAdd) {
+  async function getNewTodos(todosToAdd) {
 
     let userInput = await prompt.addTodo();
     todosToAdd.push(userInput.newTodo);
     // creation of to do can be done here but it would violate separation of concern
     if (userInput.askAgain) {
       return await getNewTodos(todosToAdd);
-    }else {
+    } else {
       return todosToAdd
     }
   }
@@ -52,24 +50,40 @@ const run = async () => {
   }
 
   async function showTodo() {
-    const itemsToUpdate = await prompt.displayTodo(todoList.getTodoList()).todoList;
-    if (itemsToUpdate && itemsToUpdate.length) {
-      itemsToUpdate.each(id => {
-        const item = todoList.getItemById(id);
-        item.toggleDone();
-      })
+    const checkedIdsObj = await prompt.displayTodo(todoList.getTodoList());
+    const checkedIds = await checkedIdsObj.todoList;
+    // mark those with checked ids as done, the rest as undone
+    todoList.markAllIncomplete();
+    for (const id of checkedIds) {
+      const item = todoList.getItemById(id);
+      await item.markAsDone();
     }
     todoList.save();
   }
 
-  await initialize();
-  let answer = await prompt.displayMenu();
-  if (answer.command === 'add') {
-    await addNewTodo();
-    answer = prompt.displayMenu();
-  } else if (answer.command === 'view') {
-    await showTodo();
+  async function deleteTodo() {
+    const checkedIdsObj = await prompt.deleteTodo(todoList.getTodoList());
+    const checkedIds = await checkedIdsObj.todoList;
+    for (const id of checkedIds) {
+      await todoList.remove(id);
+    }
   }
+
+  await initialize();
+
+  async function getUserAction() {
+    let answer = await prompt.displayMenu();
+    if (answer.command === 'add') {
+      await addNewTodo();
+    } else if (answer.command === 'view') {
+      await showTodo();
+    } else if (answer.command ==='delete') {
+
+    }
+    await getUserAction();
+  }
+
+  await getUserAction();
 
 };
 run();

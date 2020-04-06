@@ -19,8 +19,13 @@ class TodoList {
     return this.list.find(item => item.id === id);
   }
 
-  remove(arrIndex) {
-    this.list.splice(arrIndex, 1);
+  markAllIncomplete() {
+    this.list.forEach(item => { item.markAsIncomplete();} );
+  }
+
+  remove(id) {
+    const indexOfItemToRemove = this.list.findIndex(item => item.id === id);
+    this.list.splice(indexOfItemToRemove, 1);
   }
 
   markAsDone(arrIndex) {
@@ -30,7 +35,6 @@ class TodoList {
   markAsIncomplete(arrIndex) {
     this.list[arrIndex].markAsIncomplete();
   }
-
 
   getTodoList() {
     return this.list;
